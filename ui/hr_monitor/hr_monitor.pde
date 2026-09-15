@@ -9,7 +9,7 @@ float minVal = 80;
 float maxVal = 210;
 
 void setup() {
-  size(1500, 1000);
+  size(1500, 900);
   frameRate(60);
 
   for (int i = 0; i < BUFFER_SIZE; i++) {
@@ -20,11 +20,19 @@ void setup() {
 }
 
 void draw() {
+  computeLayout();
   drawBackground();
 
+  drawCard(chartX, chartY, chartW, chartH);
   drawWaveform();
+
+  drawCard(bpmX, bpmY, bpmW, bpmH);
   drawReadout();
+
+  drawCard(baselineX, baselineY, baselineW, baselineH);
   drawBaselineUI();
+
+  drawCard(zoneX, zoneY, zoneW, zoneH);
   drawTimeInZone();
 
   if (millis() - lastUpdate > updateInterval) {
@@ -76,9 +84,9 @@ void drawWaveform() {
 
 void drawLine() {
   for (int i = 0; i < BUFFER_SIZE - 1; i++) {
-    float x1 = map(i, 0, BUFFER_SIZE - 1, 0, width);
+    float x1 = chartXAt(i);
     float y1 = mapY(history[i]);
-    float x2 = map(i + 1, 0, BUFFER_SIZE - 1, 0, width);
+    float x2 = chartXAt(i + 1);
     float y2 = mapY(history[i + 1]);
     line(x1, y1, x2, y2);
   }
@@ -87,28 +95,30 @@ void drawLine() {
 void drawPoints() {
   noStroke();
   for (int i = 0; i < BUFFER_SIZE; i++) {
-    float x = map(i, 0, BUFFER_SIZE - 1, 0, width);
+    float x = chartXAt(i);
     float y = mapY(history[i]);
     fill(zoneColorFor(history[i]));
     circle(x, y, 8);
   }
 }
 
+float chartXAt(int i) {
+  return map(i, 0, BUFFER_SIZE - 1, chartX + 30, chartX + chartW - 30);
+}
+
 float mapY(float val) {
-  return map(val, minVal, maxVal, height - 40, 40);
+  return map(val, minVal, maxVal, chartY + chartH - 40, chartY + 40);
 }
 
 void drawReadout() {
-  noStroke();
-  fill(PANEL_COLOR);
-  rect(0, 0, 260, 130);
+  cardLabel("CURRENT", bpmX + 24, bpmY + 20);
 
   fill(ACCENT_PRIMARY);
   textAlign(LEFT, TOP);
-  textSize(64);
-  text(currentValue, 30, 20);
+  textSize(72);
+  text(currentValue, bpmX + 20, bpmY + 45);
 
-  textSize(18);
+  textSize(20);
   fill(TEXT_MUTED);
-  text("BPM", 32, 95);
+  text("BPM", bpmX + 24, bpmY + bpmH - 45);
 }

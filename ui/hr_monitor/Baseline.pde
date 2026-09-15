@@ -27,40 +27,36 @@ void updateBaselineCapture(float latestBpm) {
 }
 
 void drawBaselineUI() {
+  cardLabel("RESTING BASELINE", baselineX + 24, baselineY + 20);
+
   if (baselineCapturing) {
     int remainingMs = baselineDurationMs - (millis() - baselineStartMillis);
     int remainingSec = ceil(remainingMs / 1000.0);
 
-    noStroke();
-    fill(PANEL_COLOR);
-    rect(width - 260, 0, 260, 90);
-
     fill(ACCENT_SECOND);
     textAlign(LEFT, TOP);
-    textSize(20);
-    text("CAPTURING BASELINE", width - 240, 15);
+    textSize(48);
+    text(remainingSec + "s", baselineX + 20, baselineY + 45);
 
-    textSize(40);
-    text(remainingSec + "s", width - 240, 40);
+    textSize(16);
+    fill(TEXT_MUTED);
+    text("capturing...", baselineX + 24, baselineY + baselineH - 45);
   } else if (restingHR > 0) {
-    noStroke();
-    fill(PANEL_COLOR);
-    rect(width - 260, 0, 260, 70);
-
     fill(ACCENT_PRIMARY);
     textAlign(LEFT, TOP);
-    textSize(18);
-    text("RESTING HR", width - 240, 15);
-    textSize(28);
-    text(nf(restingHR, 0, 1) + " bpm", width - 240, 38);
-  } else {
-    noStroke();
-    fill(PANEL_COLOR);
-    rect(width - 260, 0, 260, 50);
+    textSize(48);
+    text(nf(restingHR, 0, 1), baselineX + 20, baselineY + 45);
 
+    textSize(18);
+    fill(TEXT_MUTED);
+    text("bpm resting", baselineX + 24, baselineY + baselineH - 45);
+  } else {
     fill(TEXT_MUTED);
     textAlign(LEFT, TOP);
+    textSize(22);
+    text("Press 'b'", baselineX + 20, baselineY + 45);
+
     textSize(16);
-    text("Press 'b' to capture", width - 240, 18);
+    text("to capture", baselineX + 24, baselineY + baselineH - 45);
   }
 }

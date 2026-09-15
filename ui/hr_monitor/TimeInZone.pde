@@ -35,35 +35,23 @@ void drawTimeInZone() {
   float total = totalActiveMs();
   if (total <= 0) total = 1;
 
-  int panelX = 20;
-  int panelY = height - 190;
-  int panelW = 420;
-  int panelH = 170;
-
-  noStroke();
-  fill(PANEL_COLOR);
-  rect(panelX, panelY, panelW, panelH);
-
-  fill(TEXT_MUTED);
-  textAlign(LEFT, TOP);
-  textSize(14);
-  text("TIME IN ZONE", panelX + 15, panelY + 10);
+  cardLabel("TIME IN ZONE", zoneX + 24, zoneY + 20);
 
   int totalSec = int(total / 1000);
   fill(ACCENT_PRIMARY);
   textSize(14);
   textAlign(RIGHT, TOP);
-  text("Active: " + totalSec + "s", panelX + panelW - 15, panelY + 10);
+  text("Active: " + totalSec + "s", zoneX + zoneW - 24, zoneY + 20);
 
   String[] labels = {"Very Light", "Light", "Moderate", "Hard", "Maximum"};
   float[] values = {msInVLight, msInLight, msInMod, msInHard, msInMax};
   color[] colors = {ZONE_MAX, ZONE_HARD, ZONE_MOD, ZONE_VLIGHT, ZONE_LIGHT};
 
-  int barX = panelX + 15;
-  int barW = panelW - 30;
-  int barH = 18;
-  int barGap = 10;
-  int barY = panelY + 35;
+  int barX = int(zoneX + 24);
+  int barW = int(zoneW - 48);
+  int barH = 20;
+  int barGap = 12;
+  int barY = int(zoneY + 50);
 
   textAlign(LEFT, CENTER);
   for (int i = 0; i < labels.length; i++) {
@@ -71,15 +59,15 @@ void drawTimeInZone() {
     float w = frac * barW;
 
     noStroke();
-    fill(40, 40, 50);
-    rect(barX, barY, barW, barH);
+    fill(255, 255, 255, 15);
+    rect(barX, barY, barW, barH, 6);
 
     fill(colors[i]);
-    rect(barX, barY, w, barH);
+    rect(barX, barY, w, barH, 6);
 
     fill(255);
     textSize(12);
-    text(labels[i] + "  " + int(values[i] / 1000) + "s", barX + 6, barY + barH / 2);
+    text(labels[i] + "  " + int(values[i] / 1000) + "s", barX + 10, barY + barH / 2);
 
     barY += barH + barGap;
   }
