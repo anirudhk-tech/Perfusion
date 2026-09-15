@@ -8,6 +8,8 @@ int currentValue = 100;
 float minVal = 80;
 float maxVal = 210;
 
+boolean USE_SERIAL = true;
+
 void setup() {
   size(1500, 900);
   frameRate(60);
@@ -17,6 +19,10 @@ void setup() {
   }
 
   textFont(createFont("Menlo", 64));
+
+  if (USE_SERIAL) {
+    setupSerial();
+  }
 }
 
 void draw() {
@@ -42,14 +48,26 @@ void draw() {
 
   drawCompareOverlay();
 
-  if (millis() - lastUpdate > updateInterval) {
-    updateData();
-    updateBaselineCapture(currentValue);
-    updateTimeInZone(currentValue);
-    updateStressDetection(currentValue);
-    recordSessionRow(currentValue);
+  if (!USE_SERIAL && millis() - lastUpdate > updateInterval) {
+    float rawBpm = random(90, 201);
+    float confidence = random(0, 1);
+    onNewReading(filterReading(rawBpm, confidence));
     lastUpdate = millis();
   }
+}
+
+void onNewReading(float value) {
+  currentValue = int(value);
+
+  for (int i = 0; i < BUFFER_SIZE - 1; i++) {
+    history[i] = history[i + 1];
+  }
+  history[BUFFER_SIZE - 1] = currentValue;
+
+  updateBaselineCapture(currentValue);
+  updateTimeInZone(currentValue);
+  updateStressDetection(currentValue);
+  recordSessionRow(currentValue);
 }
 
 void keyPressed() {
@@ -65,17 +83,6 @@ void keyPressed() {
   if (key == 'c' || key == 'C') {
     toggleCompare();
   }
-}
-
-void updateData() {
-  float rawBpm = random(90, 201);
-  float confidence = random(0, 1);
-  currentValue = int(filterReading(rawBpm, confidence));
-
-  for (int i = 0; i < BUFFER_SIZE - 1; i++) {
-    history[i] = history[i + 1];
-  }
-  history[BUFFER_SIZE - 1] = currentValue;
 }
 
 void drawBackground() {
