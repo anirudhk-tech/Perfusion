@@ -26,6 +26,7 @@ void draw() {
   drawCard(chartX, chartY, chartW, chartH);
   drawWaveform();
   drawModeBadge();
+  drawExportCue();
 
   drawCard(bpmX, bpmY, bpmW, bpmH);
   drawReadout();
@@ -44,6 +45,7 @@ void draw() {
     updateBaselineCapture(currentValue);
     updateTimeInZone(currentValue);
     updateStressDetection(currentValue);
+    recordSessionRow(currentValue);
     lastUpdate = millis();
   }
 }
@@ -54,6 +56,9 @@ void keyPressed() {
   }
   if (key == 'm' || key == 'M') {
     cycleMode();
+  }
+  if (key == 'e' || key == 'E') {
+    exportSession();
   }
 }
 
