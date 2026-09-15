@@ -35,7 +35,9 @@ void draw() {
 
   drawCompareOverlay();
 
-  if (!USE_SERIAL) {
+  if (USE_SERIAL) {
+    pollSerial();
+  } else {
     updateMockData();
   }
 }
