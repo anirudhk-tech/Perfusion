@@ -63,7 +63,9 @@ void keyPressed() {
 }
 
 void updateData() {
-  currentValue = int(random(90, 201));
+  float rawBpm = random(90, 201);
+  float confidence = random(0, 1);
+  currentValue = int(filterReading(rawBpm, confidence));
 
   for (int i = 0; i < BUFFER_SIZE - 1; i++) {
     history[i] = history[i + 1];
