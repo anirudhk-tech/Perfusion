@@ -32,6 +32,7 @@ void exportSession() {
   lastExportMessage = "Saved: " + filename;
   lastExportMessageMillis = millis();
 
+  archiveSession();
   sessionRows.clear();
 }
 
@@ -39,7 +40,7 @@ void drawExportCue() {
   fill(TEXT_MUTED);
   textAlign(LEFT, BOTTOM);
   textSize(14);
-  text("press 'e' to export session (" + sessionRows.size() + " rows)", chartX + 24, chartY + chartH - 16);
+  text("press 'e' to export session (" + sessionRows.size() + " rows)  |  'c' to compare", chartX + 24, chartY + chartH - 16);
 
   if (lastExportMessageMillis != -1 && millis() - lastExportMessageMillis < 4000) {
     fill(ACCENT_PRIMARY);

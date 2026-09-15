@@ -40,6 +40,8 @@ void draw() {
   drawCard(zoneX, zoneY, zoneW, zoneH);
   drawTimeInZone();
 
+  drawCompareOverlay();
+
   if (millis() - lastUpdate > updateInterval) {
     updateData();
     updateBaselineCapture(currentValue);
@@ -59,6 +61,9 @@ void keyPressed() {
   }
   if (key == 'e' || key == 'E') {
     exportSession();
+  }
+  if (key == 'c' || key == 'C') {
+    toggleCompare();
   }
 }
 
