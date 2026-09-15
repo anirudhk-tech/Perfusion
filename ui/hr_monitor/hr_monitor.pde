@@ -25,10 +25,12 @@ void draw() {
   drawWaveform();
   drawReadout();
   drawBaselineUI();
+  drawTimeInZone();
 
   if (millis() - lastUpdate > updateInterval) {
     updateData();
     updateBaselineCapture(currentValue);
+    updateTimeInZone(currentValue);
     lastUpdate = millis();
   }
 }
