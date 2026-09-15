@@ -3,10 +3,10 @@ float[] history = new float[BUFFER_SIZE];
 
 int lastUpdate = 0;
 int updateInterval = 500;
-int currentValue = 240;
+int currentValue = 100;
 
-float minVal = 180;
-float maxVal = 320;
+float minVal = 80;
+float maxVal = 210;
 
 void setup() {
   size(1500, 1000);
@@ -40,7 +40,7 @@ void keyPressed() {
 }
 
 void updateData() {
-  currentValue = int(random(250, 301));
+  currentValue = int(random(90, 201));
 
   for (int i = 0; i < BUFFER_SIZE - 1; i++) {
     history[i] = history[i + 1];
@@ -60,24 +60,35 @@ void drawWaveform() {
   noFill();
 
   for (int glow = 3; glow >= 1; glow--) {
+    stroke(red(ACCENT_PRIMARY), green(ACCENT_PRIMARY), blue(ACCENT_PRIMARY), 40);
     strokeWeight(glow * 4);
-    drawSegments(40);
+    drawLine();
   }
 
+  stroke(ACCENT_PRIMARY);
   strokeWeight(2.5);
-  drawSegments(255);
+  drawLine();
+
+  drawPoints();
 }
 
-void drawSegments(int alpha) {
+void drawLine() {
   for (int i = 0; i < BUFFER_SIZE - 1; i++) {
     float x1 = map(i, 0, BUFFER_SIZE - 1, 0, width);
     float y1 = mapY(history[i]);
     float x2 = map(i + 1, 0, BUFFER_SIZE - 1, 0, width);
     float y2 = mapY(history[i + 1]);
-
-    color segColor = zoneColorFor(history[i + 1]);
-    stroke(red(segColor), green(segColor), blue(segColor), alpha);
     line(x1, y1, x2, y2);
+  }
+}
+
+void drawPoints() {
+  noStroke();
+  for (int i = 0; i < BUFFER_SIZE; i++) {
+    float x = map(i, 0, BUFFER_SIZE - 1, 0, width);
+    float y = mapY(history[i]);
+    fill(zoneColorFor(history[i]));
+    circle(x, y, 8);
   }
 }
 
