@@ -25,6 +25,7 @@ void draw() {
 
   drawCard(chartX, chartY, chartW, chartH);
   drawWaveform();
+  drawModeBadge();
 
   drawCard(bpmX, bpmY, bpmW, bpmH);
   drawReadout();
@@ -46,6 +47,9 @@ void draw() {
 void keyPressed() {
   if (key == 'b' || key == 'B') {
     startBaselineCapture();
+  }
+  if (key == 'm' || key == 'M') {
+    cycleMode();
   }
 }
 
