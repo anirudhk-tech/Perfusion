@@ -33,6 +33,9 @@ void draw() {
   drawCard(baselineX, baselineY, baselineW, baselineH);
   drawBaselineUI();
 
+  drawCard(stressX, stressY, stressW, stressH);
+  drawStressIndicator();
+
   drawCard(zoneX, zoneY, zoneW, zoneH);
   drawTimeInZone();
 
@@ -40,6 +43,7 @@ void draw() {
     updateData();
     updateBaselineCapture(currentValue);
     updateTimeInZone(currentValue);
+    updateStressDetection(currentValue);
     lastUpdate = millis();
   }
 }
