@@ -1,23 +1,10 @@
-int BUFFER_SIZE = 60;
-float[] history = new float[BUFFER_SIZE];
-
-int lastUpdate = 0;
-int updateInterval = 500;
-int currentValue = 100;
-
-float minVal = 80;
-float maxVal = 210;
-
 boolean USE_SERIAL = true;
 
 void setup() {
   size(1500, 900);
   frameRate(60);
 
-  for (int i = 0; i < BUFFER_SIZE; i++) {
-    history[i] = currentValue;
-  }
-
+  initChartHistory(currentValue);
   textFont(createFont("Menlo", 64));
 
   if (USE_SERIAL) {
@@ -48,26 +35,9 @@ void draw() {
 
   drawCompareOverlay();
 
-  if (!USE_SERIAL && millis() - lastUpdate > updateInterval) {
-    float rawBpm = random(90, 201);
-    float confidence = random(0, 1);
-    onNewReading(filterReading(rawBpm, confidence));
-    lastUpdate = millis();
+  if (!USE_SERIAL) {
+    updateMockData();
   }
-}
-
-void onNewReading(float value) {
-  currentValue = int(value);
-
-  for (int i = 0; i < BUFFER_SIZE - 1; i++) {
-    history[i] = history[i + 1];
-  }
-  history[BUFFER_SIZE - 1] = currentValue;
-
-  updateBaselineCapture(currentValue);
-  updateTimeInZone(currentValue);
-  updateStressDetection(currentValue);
-  recordSessionRow(currentValue);
 }
 
 void keyPressed() {
@@ -83,58 +53,6 @@ void keyPressed() {
   if (key == 'c' || key == 'C') {
     toggleCompare();
   }
-}
-
-void drawBackground() {
-  for (int y = 0; y < height; y++) {
-    float t = map(y, 0, height, 0, 1);
-    stroke(lerpColor(BG_TOP, BG_BOTTOM, t));
-    line(0, y, width, y);
-  }
-}
-
-void drawWaveform() {
-  noFill();
-
-  for (int glow = 3; glow >= 1; glow--) {
-    stroke(red(ACCENT_PRIMARY), green(ACCENT_PRIMARY), blue(ACCENT_PRIMARY), 40);
-    strokeWeight(glow * 4);
-    drawLine();
-  }
-
-  stroke(ACCENT_PRIMARY);
-  strokeWeight(2.5);
-  drawLine();
-
-  drawPoints();
-}
-
-void drawLine() {
-  for (int i = 0; i < BUFFER_SIZE - 1; i++) {
-    float x1 = chartXAt(i);
-    float y1 = mapY(history[i]);
-    float x2 = chartXAt(i + 1);
-    float y2 = mapY(history[i + 1]);
-    line(x1, y1, x2, y2);
-  }
-}
-
-void drawPoints() {
-  noStroke();
-  for (int i = 0; i < BUFFER_SIZE; i++) {
-    float x = chartXAt(i);
-    float y = mapY(history[i]);
-    fill(zoneColorFor(history[i]));
-    circle(x, y, 8);
-  }
-}
-
-float chartXAt(int i) {
-  return map(i, 0, BUFFER_SIZE - 1, chartX + 30, chartX + chartW - 30);
-}
-
-float mapY(float val) {
-  return map(val, minVal, maxVal, chartY + chartH - 40, chartY + 40);
 }
 
 void drawReadout() {
