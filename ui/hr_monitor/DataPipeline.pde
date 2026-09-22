@@ -1,6 +1,7 @@
 int lastUpdate = 0;
 int updateInterval = 500;
 int currentValue = 100;
+float currentSpo2 = 98;
 
 void updateMockData() {
   if (millis() - lastUpdate <= updateInterval) return;

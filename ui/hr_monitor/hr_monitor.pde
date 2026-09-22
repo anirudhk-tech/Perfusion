@@ -24,6 +24,9 @@ void draw() {
   drawCard(bpmX, bpmY, bpmW, bpmH);
   drawReadout();
 
+  drawCard(spo2X, spo2Y, spo2W, spo2H);
+  drawSpo2Readout();
+
   drawCard(baselineX, baselineY, baselineW, baselineH);
   drawBaselineUI();
 
@@ -60,10 +63,23 @@ void drawReadout() {
 
   fill(ACCENT_PRIMARY);
   textAlign(LEFT, TOP);
-  textSize(72);
-  text(currentValue, bpmX + 20, bpmY + 45);
+  textSize(48);
+  text(currentValue, bpmX + 20, bpmY + 40);
 
-  textSize(20);
+  textSize(16);
   fill(TEXT_MUTED);
-  text("BPM", bpmX + 24, bpmY + bpmH - 45);
+  text("BPM", bpmX + 24, bpmY + bpmH - 30);
+}
+
+void drawSpo2Readout() {
+  cardLabel("BLOOD OXYGEN", spo2X + 24, spo2Y + 20);
+
+  fill(ACCENT_SECOND);
+  textAlign(LEFT, TOP);
+  textSize(48);
+  text(nf(currentSpo2, 0, 1), spo2X + 20, spo2Y + 40);
+
+  textSize(16);
+  fill(TEXT_MUTED);
+  text("SpO2 %", spo2X + 24, spo2Y + spo2H - 30);
 }

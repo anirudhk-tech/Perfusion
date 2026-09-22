@@ -3,6 +3,7 @@ float GAP = 20;
 
 float chartX, chartY, chartW, chartH;
 float bpmX, bpmY, bpmW, bpmH;
+float spo2X, spo2Y, spo2W, spo2H;
 float baselineX, baselineY, baselineW, baselineH;
 float stressX, stressY, stressW, stressH;
 float zoneX, zoneY, zoneW, zoneH;
@@ -19,11 +20,16 @@ void computeLayout() {
   bpmW = 320;
   baselineW = 320;
 
+  float splitH = (rowH - GAP) / 2;
+
   bpmX = MARGIN;
   bpmY = rowY;
-  bpmH = rowH;
+  bpmH = splitH;
 
-  float splitH = (rowH - GAP) / 2;
+  spo2X = bpmX;
+  spo2W = bpmW;
+  spo2Y = bpmY + bpmH + GAP;
+  spo2H = splitH;
 
   baselineX = bpmX + bpmW + GAP;
   baselineY = rowY;

@@ -32,6 +32,7 @@ void serialEvent(Serial p) {
   }
 
   float hr = float(hrField);
+  float spo2 = float(fields[3]);
   float confidencePct = float(fields[4]);
 
   if (Float.isNaN(hr) || Float.isNaN(confidencePct)) {
@@ -39,7 +40,11 @@ void serialEvent(Serial p) {
     return;
   }
 
+  if (!Float.isNaN(spo2)) {
+    currentSpo2 = spo2;
+  }
+
   float confidence = confidencePct / 100.0;
-  println("hr=" + hr + " confidencePct=" + confidencePct);
+  println("hr=" + hr + " confidencePct=" + confidencePct + " spo2=" + spo2);
   onNewReading(filterReading(hr, confidence));
 }
