@@ -19,6 +19,7 @@ void draw() {
   drawCard(chartX, chartY, chartW, chartH);
   drawWaveform();
   drawModeBadge();
+  drawAgeBadge();
   drawExportCue();
 
   drawCard(bpmX, bpmY, bpmW, bpmH);
@@ -55,6 +56,12 @@ void keyPressed() {
   }
   if (key == 'c' || key == 'C') {
     toggleCompare();
+  }
+  if (key == '[') {
+    decreaseAge();
+  }
+  if (key == ']') {
+    increaseAge();
   }
 }
 
