@@ -45,7 +45,7 @@ void drawTimeInZone() {
 
   String[] labels = {"Very Light", "Light", "Moderate", "Hard", "Maximum"};
   float[] values = {msInVLight, msInLight, msInMod, msInHard, msInMax};
-  color[] colors = {ZONE_MAX, ZONE_HARD, ZONE_MOD, ZONE_VLIGHT, ZONE_LIGHT};
+  color[] colors = {ZONE_VLIGHT, ZONE_LIGHT, ZONE_MOD, ZONE_HARD, ZONE_MAX};
 
   int barX = int(zoneX + 24);
   int barW = int(zoneW - 48);

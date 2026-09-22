@@ -6,9 +6,11 @@ float pctOfMax(float bpm) {
 }
 
 color zoneColorFor(float bpm) {
-  if (bpm < 66) return ZONE_MAX;
-  if (bpm < 72) return ZONE_HARD;
-  if (bpm < 78) return ZONE_MOD;
-  if (bpm < 84) return ZONE_VLIGHT;
-  return ZONE_LIGHT;
+  float pct = pctOfMax(bpm);
+
+  if (pct < 60) return ZONE_VLIGHT;
+  if (pct < 70) return ZONE_LIGHT;
+  if (pct < 80) return ZONE_MOD;
+  if (pct < 90) return ZONE_HARD;
+  return ZONE_MAX;
 }
