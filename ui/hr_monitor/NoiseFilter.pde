@@ -6,6 +6,7 @@ float MIN_CONFIDENCE = 0.5;
 
 float filterReading(float rawBpm, float confidence) {
   if (confidence < MIN_CONFIDENCE) {
+    println("filterReading: low confidence (" + confidence + "), holding at " + currentValue);
     return currentValue;
   }
 
@@ -22,5 +23,7 @@ float filterReading(float rawBpm, float confidence) {
     sum += rawWindow[i];
   }
 
-  return sum / rawWindowCount;
+  float filtered = sum / rawWindowCount;
+  println("filterReading: raw=" + rawBpm + " confidence=" + confidence + " -> filtered=" + filtered);
+  return filtered;
 }

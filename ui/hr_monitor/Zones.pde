@@ -1,4 +1,4 @@
-int age = 25;
+int age = 20;
 int maxHR = 220 - age;
 
 float pctOfMax(float bpm) {

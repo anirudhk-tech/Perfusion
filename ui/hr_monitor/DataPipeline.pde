@@ -13,6 +13,7 @@ void updateMockData() {
 
 void onNewReading(float value) {
   currentValue = int(value);
+  println("onNewReading: currentValue set to " + currentValue);
   pushToHistory(currentValue);
 
   updateBaselineCapture(currentValue);
