@@ -10,25 +10,17 @@ void setupSerial() {
   printArray(Serial.list());
 
   arduinoPort = new Serial(this, SERIAL_PORT_NAME, SERIAL_BAUD);
+  arduinoPort.bufferUntil('\n');
 }
 
-void pollSerial() {
-  while (arduinoPort.available() > 0) {
-    String line = arduinoPort.readStringUntil('\n');
-    if (line == null) break;
-    processSerialLine(line);
-  }
-}
-
-void processSerialLine(String rawLine) {
-  String line = trim(rawLine);
+void serialEvent(Serial p) {
+  String line = p.readStringUntil('\n');
+  if (line == null) return;
+  line = trim(line);
   if (line.length() == 0) return;
 
   String[] fields = split(line, ',');
-  if (fields.length != 5) {
-    println("skipped line (fields=" + fields.length + "): " + line);
-    return;
-  }
+  if (fields.length != 5) return;
 
   String hrField = fields[1];
   if (hrField.equals("NA")) return;
@@ -36,10 +28,7 @@ void processSerialLine(String rawLine) {
   float hr = float(hrField);
   float confidencePct = float(fields[4]);
 
-  if (Float.isNaN(hr) || Float.isNaN(confidencePct)) {
-    println("skipped line (NaN): " + line);
-    return;
-  }
+  if (Float.isNaN(hr) || Float.isNaN(confidencePct)) return;
 
   float confidence = confidencePct / 100.0;
   println("hr=" + hr + " confidencePct=" + confidencePct);
