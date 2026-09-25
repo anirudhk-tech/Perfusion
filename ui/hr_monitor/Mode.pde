@@ -27,7 +27,7 @@ void cycleMode() {
 }
 
 void drawModeBadge() {
-  float badgeW = 220;
+  float badgeW = 260;
   float badgeH = 60;
   float badgeX = chartX + chartW - badgeW - 16;
   float badgeY = chartY + 16;

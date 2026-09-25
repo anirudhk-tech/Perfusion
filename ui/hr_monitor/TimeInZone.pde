@@ -20,10 +20,10 @@ void updateTimeInZone(float bpm) {
 
   float pct = pctOfMax(bpm);
 
-  if (pct < 60) msInVLight += dt;
-  else if (pct < 70) msInLight += dt;
-  else if (pct < 80) msInMod += dt;
-  else if (pct < 90) msInHard += dt;
+  if (pct < 33) msInVLight += dt;
+  else if (pct < 38) msInLight += dt;
+  else if (pct < 44) msInMod += dt;
+  else if (pct < 70) msInHard += dt;
   else msInMax += dt;
 }
 

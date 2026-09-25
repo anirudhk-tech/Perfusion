@@ -18,11 +18,20 @@ void updateStressDetection(float bpm) {
       aboveThresholdSinceMillis = millis();
     }
     if (millis() - aboveThresholdSinceMillis >= STRESS_SUSTAIN_MS) {
+      if (!isStressed) {
+        triggerStressAlert();
+      }
       isStressed = true;
     }
   } else {
     aboveThresholdSinceMillis = -1;
     isStressed = false;
+  }
+}
+
+void triggerStressAlert() {
+  if (USE_SERIAL && arduinoPort != null) {
+    arduinoPort.write('S');
   }
 }
 

@@ -16,6 +16,11 @@ unsigned long lineCount = 0;
 
 unsigned long beatInterval_ms = 0;
 
+const unsigned long BEEP_ON_MS  = 150;
+const unsigned long BEEP_OFF_MS = 120;
+int beepStage = 0;
+unsigned long beepStageStart = 0;
+
 void setup() {
   Serial.begin(115200);
   while (!Serial) { ; }
@@ -55,6 +60,17 @@ void setup() {
 void loop() {
   unsigned long now = millis();
 
+  if (Serial.available() > 0) {
+    char cmd = Serial.read();
+    if (cmd == 'S' && beepStage == 0) {
+      beepStage = 1;
+      beepStageStart = now;
+      digitalWrite(BUZZER_PIN, HIGH);
+    }
+  }
+
+  updateBeep(now);
+
   if (now - lastSampleTime >= SAMPLE_INTERVAL_MS) {
     lastSampleTime = now;
     body = bioHub.readBpm();
@@ -74,6 +90,21 @@ void loop() {
     }
     printRow(now, hr, spo2, confidence, beatInterval_ms, validReading);
     lineCount++;
+  }
+}
+
+void updateBeep(unsigned long now) {
+  if (beepStage == 1 && now - beepStageStart >= BEEP_ON_MS) {
+    digitalWrite(BUZZER_PIN, LOW);
+    beepStage = 2;
+    beepStageStart = now;
+  } else if (beepStage == 2 && now - beepStageStart >= BEEP_OFF_MS) {
+    digitalWrite(BUZZER_PIN, HIGH);
+    beepStage = 3;
+    beepStageStart = now;
+  } else if (beepStage == 3 && now - beepStageStart >= BEEP_ON_MS) {
+    digitalWrite(BUZZER_PIN, LOW);
+    beepStage = 0;
   }
 }
 

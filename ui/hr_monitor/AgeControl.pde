@@ -81,7 +81,7 @@ void drawAgeEntryScreen() {
 }
 
 void drawAgeBadge() {
-  float badgeW = 220;
+  float badgeW = 260;
   float badgeH = 60;
   float badgeX = chartX + chartW - badgeW - 16;
   float badgeY = chartY + 16 + 60 + 12;
@@ -107,7 +107,7 @@ void drawAgeBadge() {
     text("AGE: " + age, badgeX + 26, badgeY + 20);
 
     fill(TEXT_MUTED);
-    textSize(13);
-    text("'a' to type, '[' / ']' to nudge", badgeX + 26, badgeY + 44);
+    textSize(12);
+    text("'a' type  ·  '[' ']' nudge", badgeX + 26, badgeY + 44);
   }
 }
