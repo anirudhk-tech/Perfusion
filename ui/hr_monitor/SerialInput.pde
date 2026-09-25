@@ -44,6 +44,15 @@ void serialEvent(Serial p) {
     currentSpo2 = spo2;
   }
 
+  if (!fields[2].equals("NA")) {
+    float beatInterval = float(fields[2]);
+    if (!Float.isNaN(beatInterval)) {
+      currentBeatIntervalMs = beatInterval;
+    }
+  }
+
+  currentConfidencePct = confidencePct;
+
   float confidence = confidencePct / 100.0;
   println("hr=" + hr + " confidencePct=" + confidencePct + " spo2=" + spo2);
   onNewReading(filterReading(hr, confidence));

@@ -76,6 +76,17 @@ void drawReadout() {
   textSize(16);
   fill(TEXT_MUTED);
   text("BPM", bpmX + 24, bpmY + bpmH - 30);
+
+  if (currentBeatIntervalMs > 0) {
+    fill(ACCENT_SECOND);
+    textAlign(RIGHT, TOP);
+    textSize(20);
+    text(int(currentBeatIntervalMs) + " ms", bpmX + bpmW - 24, bpmY + 20);
+
+    fill(TEXT_MUTED);
+    textSize(14);
+    text("beat interval", bpmX + bpmW - 24, bpmY + 44);
+  }
 }
 
 void drawSpo2Readout() {
@@ -89,4 +100,16 @@ void drawSpo2Readout() {
   textSize(16);
   fill(TEXT_MUTED);
   text("SpO2 %", spo2X + 24, spo2Y + spo2H - 30);
+
+  String confLabel = currentConfidencePct >= 50 ? "Good" : "Low";
+  color confColor = currentConfidencePct >= 50 ? ZONE_LIGHT : ZONE_MAX;
+
+  fill(confColor);
+  textAlign(RIGHT, TOP);
+  textSize(20);
+  text(int(currentConfidencePct) + "%", spo2X + spo2W - 24, spo2Y + 20);
+
+  fill(TEXT_MUTED);
+  textSize(14);
+  text("confidence (" + confLabel + ")", spo2X + spo2W - 24, spo2Y + 44);
 }
