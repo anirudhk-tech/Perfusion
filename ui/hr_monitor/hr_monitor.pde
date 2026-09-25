@@ -13,6 +13,11 @@ void setup() {
 }
 
 void draw() {
+  if (!appStarted) {
+    drawAgeEntryScreen();
+    return;
+  }
+
   computeLayout();
   drawBackground();
 
@@ -45,6 +50,8 @@ void draw() {
 }
 
 void keyPressed() {
+  if (handleAgeInputKey()) return;
+
   if (key == 'b' || key == 'B') {
     startBaselineCapture();
   }
