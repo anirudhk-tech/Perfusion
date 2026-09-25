@@ -5,11 +5,6 @@ int SERIAL_BAUD = 115200;
 
 Serial arduinoPort;
 
-float pendingHr = -1;
-float pendingConfidencePct = -1;
-float pendingOxygen = -1;
-int pendingStatus = -1;
-
 void setupSerial() {
   println("Available serial ports:");
   printArray(Serial.list());
@@ -24,56 +19,41 @@ void serialEvent(Serial p) {
   line = trim(line);
   if (line.length() == 0) return;
 
-  if (line.startsWith("Heartrate:")) {
-    pendingHr = float(trim(line.substring(line.indexOf(':') + 1)));
+  String[] fields = split(line, ',');
+  if (fields.length != 5) {
+    println("serialEvent: skipped line (fields=" + fields.length + "): " + line);
     return;
   }
 
-  if (line.startsWith("Confidence:")) {
-    pendingConfidencePct = float(trim(line.substring(line.indexOf(':') + 1)));
+  String hrField = fields[1];
+  if (hrField.equals("NA")) {
+    println("serialEvent: skipped line (NA reading): " + line);
     return;
   }
 
-  if (line.startsWith("Oxygen:")) {
-    pendingOxygen = float(trim(line.substring(line.indexOf(':') + 1)));
+  float hr = float(hrField);
+  float spo2 = float(fields[3]);
+  float confidencePct = float(fields[4]);
+
+  if (Float.isNaN(hr) || Float.isNaN(confidencePct)) {
+    println("serialEvent: skipped line (NaN parse): " + line);
     return;
   }
 
-  if (line.startsWith("Status:")) {
-    pendingStatus = int(trim(line.substring(line.indexOf(':') + 1)));
-    processSensorCycle();
-    return;
+  if (!Float.isNaN(spo2)) {
+    currentSpo2 = spo2;
   }
 
-  println("serialEvent: unrecognized line: " + line);
-}
-
-void processSensorCycle() {
-  if (Float.isNaN(pendingHr) || Float.isNaN(pendingConfidencePct) || Float.isNaN(pendingOxygen)) {
-    println("processSensorCycle: skipped (NaN parse)");
-    resetPendingCycle();
-    return;
+  if (!fields[2].equals("NA")) {
+    float beatInterval = float(fields[2]);
+    if (!Float.isNaN(beatInterval)) {
+      currentBeatIntervalMs = beatInterval;
+    }
   }
 
-  if (pendingStatus < 2) {
-    println("processSensorCycle: skipped (status=" + pendingStatus + ", no finger / weak signal)");
-    resetPendingCycle();
-    return;
-  }
+  currentConfidencePct = confidencePct;
 
-  currentSpo2 = pendingOxygen;
-  currentConfidencePct = pendingConfidencePct;
-
-  float confidence = pendingConfidencePct / 100.0;
-  println("hr=" + pendingHr + " confidencePct=" + pendingConfidencePct + " spo2=" + pendingOxygen + " status=" + pendingStatus);
-  onNewReading(filterReading(pendingHr, confidence));
-
-  resetPendingCycle();
-}
-
-void resetPendingCycle() {
-  pendingHr = -1;
-  pendingConfidencePct = -1;
-  pendingOxygen = -1;
-  pendingStatus = -1;
+  float confidence = confidencePct / 100.0;
+  println("hr=" + hr + " confidencePct=" + confidencePct + " spo2=" + spo2);
+  onNewReading(filterReading(hr, confidence));
 }
