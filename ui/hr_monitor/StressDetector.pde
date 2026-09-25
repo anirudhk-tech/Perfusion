@@ -1,5 +1,5 @@
-float STRESS_THRESHOLD_PCT = 1.15;
-int STRESS_SUSTAIN_MS = 10000;
+float STRESS_THRESHOLD_PCT = 1.0;
+int STRESS_SUSTAIN_MS = 1000;
 
 boolean isStressed = false;
 int aboveThresholdSinceMillis = -1;
