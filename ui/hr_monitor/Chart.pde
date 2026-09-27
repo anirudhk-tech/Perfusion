@@ -1,8 +1,8 @@
-int BUFFER_SIZE = 60;
+int BUFFER_SIZE = 200;
 float[] history = new float[BUFFER_SIZE];
 
-float minVal = 50;
-float maxVal = 140;
+float minVal = 30;
+float maxVal = 300;
 
 void initChartHistory(float seedValue) {
   for (int i = 0; i < BUFFER_SIZE; i++) {
